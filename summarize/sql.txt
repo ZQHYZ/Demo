@@ -1,0 +1,9 @@
+sqlserver:
+	Adding strings to the original value
+	update table set colume = CONCAT(colume,'content') where condition
+
+	replace part of the colume value
+	update table set colume=REPLACE(colume,'to be replaced','new value') where condition
+
+	judging whether it exists in the database
+	select isnull((select top(1) 1 from table where condition),0)
