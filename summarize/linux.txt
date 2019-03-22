@@ -1,0 +1,3 @@
+no packages markde for update   while executing the yum update command
+yum clean all 
+then execute the update command
