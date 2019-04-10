@@ -8,4 +8,8 @@ public interface MybatisMapper {
     List<Person> findAll();
 
     List<Person> getCategory(String pcode);
+
+    Integer ifExist();
+
+    String findByCode(String code);
 }

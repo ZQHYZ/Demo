@@ -3,10 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.Person;
 import com.example.demo.service.MybatisService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,4 +26,24 @@ public class MybatisController {
     public List<Person> findTree(@PathVariable("pcode")String pcode) {
         return mybatisService.findTree(pcode);
     }
+    /**
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("/ifExist")
+    public Boolean ifExist() {
+        return mybatisService.ifExist();
+    }
+
+    /**
+     *向上递归
+     * @param
+     * @return
+     */
+    @GetMapping("/getPs/{code}")
+    public List<String> getPs(@PathVariable("code")String code) {
+        return mybatisService.getPs(code);
+    }
+
 }
