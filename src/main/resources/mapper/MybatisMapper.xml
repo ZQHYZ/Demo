@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+ -->
+<mapper namespace="com.example.demo.dao.MybatisMapper">
+    <!-- 在select标签中编写查询的SQL语句， 设置select标签的id属性为getUser，id属性值必须是唯一的，不能够重复
+    使用parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集类型
+    resultType="me.gacl.domain.User"就表示将查询结果封装成一个User类的对象返回
+    User类就是users表所对应的实体类
+    -->
+    <!--
+        根据id查询得到一个user对象
+     -->
+    <resultMap id="BASE_RESULT_MAP" type="com.example.demo.model.Person">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="pcode" jdbcType="VARCHAR" property="pcode"/>
+    </resultMap>
+    <sql id="BASE_COLUME">
+        id,code,name,age,pcode
+    </sql>
+    <select id="findAll" resultMap="BASE_RESULT_MAP">
+        select
+        <include refid="BASE_COLUME"/>
+        from test
+    </select>
+
+
+    <!--<select id="findTree" resultMap="BASE_RESULT_MAP">
+		select * FROM test t1,test t2  WHERE t1.code = t2.pcode
+	</select>-->
+
+
+    <!--根据父子表返回树结构对象   向下递归-->
+    <!--//这里可以不用指定oftype  使用反向查询select从另一个maper文件中取出数据时必须用ofType-->
+    <resultMap  id="getSelf" type="com.example.demo.model.Person">
+        <id column="id" property="id"></id>
+        <result column="code" property="code"></result>
+        <result column="name" property="name"></result>
+        <result column="age" property="age"></result>
+        <result column="pcode" property="pcode"></result>
+        <collection property="child" select="getCategory" column="code"></collection>
+
+    </resultMap>
+    <!--查到的cid作为下次的pid-->
+
+    <select id="getCategory" resultMap="getSelf" >
+        select * from test where pcode=#{pcode}
+    </select>
+
+    <!--判断是否存在-->
+    <select id="ifExist">
+        select 1 from tablename where col = 'col' limit 1;
+    <!--select isnull((select top(1) 1 from test where pcode = "b"), 0)-->
+    </select>
+
+
+    <select id="findByCode" parameterType="java.lang.String" resultType="java.lang.String">
+        select pcode from test where code = #{code};
+    </select>
+</mapper>
